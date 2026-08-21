@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Result</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container py-5">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold">📊 Analysis Result</h1>
+        <p class="text-muted">Resume: <strong>{{ filename }}</strong></p>
+    </div>
+
+    <!-- Match Score -->
+    <div class="card shadow-sm mb-4 mx-auto" style="max-width: 700px;">
+        <div class="card-body text-center p-4">
+            <h5 class="text-muted mb-2">Match Score</h5>
+            <h2 class="display-4 fw-bold text-{{ verdict_color }}">{{ score }}%</h2>
+            <span class="badge bg-{{ verdict_color }} fs-6">{{ verdict_text }}</span>
+            <div class="progress mt-3" style="height: 12px;">
+                <div class="progress-bar bg-{{ verdict_color }}" role="progressbar" style="width: {{ score }}%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center g-4 mb-4" style="max-width: 900px; margin: 0 auto;">
+        <!-- Matched Skills -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold text-success">✅ Matched Skills ({{ matched|length }})</h6>
+                    {% if matched %}
+                        <ul class="list-unstyled">
+                        {% for skill in matched %}
+                            <li><span class="badge bg-success-subtle text-success-emphasis mb-1">{{ skill }}</span></li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted small">No overlapping skills found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Missing Skills -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold text-danger">⚠️ Missing Skills ({{ missing|length }})</h6>
+                    {% if missing %}
+                        <ul class="list-unstyled">
+                        {% for skill in missing %}
+                            <li><span class="badge bg-danger-subtle text-danger-emphasis mb-1">{{ skill }}</span></li>
+                        {% endfor %}
+                        </ul>
+                        <p class="small text-muted mt-2">Consider adding these to your resume if you have experience with them.</p>
+                    {% else %}
+                        <p class="text-muted small">Great! No key skills missing.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Extra Skills -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold text-primary">➕ Extra Skills You Have ({{ extra|length }})</h6>
+                    {% if extra %}
+                        <ul class="list-unstyled">
+                        {% for skill in extra %}
+                            <li><span class="badge bg-primary-subtle text-primary-emphasis mb-1">{{ skill }}</span></li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted small">No extra skills beyond the JD requirements.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interview Questions -->
+    <div class="row justify-content-center g-4" style="max-width: 900px; margin: 0 auto;">
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header fw-bold">🧠 Technical Interview Questions</div>
+                <div class="card-body">
+                    <ol>
+                        {% for q in technical_questions %}
+                            <li class="mb-2">{{ q }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header fw-bold">💬 Behavioral Interview Questions</div>
+                <div class="card-body">
+                    <ol>
+                        {% for q in behavioral_questions %}
+                            <li class="mb-2">{{ q }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="{{ url_for('index') }}" class="btn btn-outline-primary">🔁 Analyze Another Resume</a>
+    </div>
+</div>
+</body>
+</html>
